@@ -1,0 +1,62 @@
+name: Build Android app
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Put uploaded files in place
+        run: |
+          mkdir -p www assets
+          if [ -f index.html ]; then cp index.html www/index.html; fi
+          for f in icon-only.png icon-foreground.png icon-background.png splash.png splash-dark.png; do
+            if [ -f "$f" ]; then cp "$f" assets/; fi
+          done
+          ls -R www assets
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Install app tools
+        run: npm install
+
+      - name: Create the Android project
+        run: npx cap add android
+
+      - name: Make the app icon and splash screen
+        run: npx capacitor-assets generate --android
+        continue-on-error: true
+
+      - name: Copy the app into the Android project
+        run: npx cap sync android
+
+      - name: Build the app
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Name the file
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk glovia-desk.apk
+
+      - name: Save the app for download
+        uses: actions/upload-artifact@v4
+        with:
+          name: glovia-desk-android
+          path: glovia-desk.apk
+          retention-days: 30
