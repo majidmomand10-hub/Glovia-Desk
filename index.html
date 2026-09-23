@@ -1,0 +1,1519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#4C2C3F">
+<title>Glovia Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>[hidden]{display:none!important} html{-webkit-text-size-adjust:100%} body{margin:0} img{max-width:100%}</style>
+<style>
+  :root {
+    --bg: #FBF7F4;
+    --surface: #FFFFFF;
+    --surface-2: #F6EEF1;
+    --ink: #34202C;
+    --muted: #7A6470;
+    --line: #EADDE3;
+    --accent: #4C2C3F;
+    --accent-ink: #FFFFFF;
+    --bar: #8E4A6C;
+    --bar-soft: #E7CFDB;
+    --wa: #1F8A54;
+    --wa-ink: #FFFFFF;
+    --ok: #2F7A55;
+    --ok-bg: #E4F2EA;
+    --info: #2F5E8A;
+    --info-bg: #E3ECF6;
+    --warn: #9A5F0E;
+    --warn-bg: #FBEFD9;
+    --bad: #B23A48;
+    --bad-bg: #F9E3E6;
+    --new: #4C2C3F;
+    --new-bg: #F1E5EB;
+    --focus: #C2567E;
+    --shadow: 0 1px 2px rgba(52, 32, 44, 0.06), 0 4px 16px rgba(52, 32, 44, 0.05);
+    --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+    --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #17100F; --surface: #221819; --surface-2: #2C2023;
+      --ink: #F3E8EC; --muted: #B8A3AC; --line: #3A2B30;
+      --accent: #E9A7C0; --accent-ink: #2A1520;
+      --bar: #E09ABB; --bar-soft: #4A3240;
+      --wa: #3DBE7E; --wa-ink: #0C2217;
+      --ok: #6FD19E; --ok-bg: #173226;
+      --info: #8DB9E8; --info-bg: #1A2A3B;
+      --warn: #F0B55C; --warn-bg: #3A2A12;
+      --bad: #F0808E; --bad-bg: #3D1C22;
+      --new: #E9C3D3; --new-bg: #33242B;
+      --focus: #F2A9C6; --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #17100F; --surface: #221819; --surface-2: #2C2023;
+    --ink: #F3E8EC; --muted: #B8A3AC; --line: #3A2B30;
+    --accent: #E9A7C0; --accent-ink: #2A1520;
+    --bar: #E09ABB; --bar-soft: #4A3240;
+    --wa: #3DBE7E; --wa-ink: #0C2217;
+    --ok: #6FD19E; --ok-bg: #173226;
+    --info: #8DB9E8; --info-bg: #1A2A3B;
+    --warn: #F0B55C; --warn-bg: #3A2A12;
+    --bad: #F0808E; --bad-bg: #3D1C22;
+    --new: #E9C3D3; --new-bg: #33242B;
+    --focus: #F2A9C6; --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: var(--sans); font-size: 15px; line-height: 1.5;
+    padding-inline: 16px; padding-block: 20px 48px;
+  }
+  .wrap { max-width: 1000px; margin: 0 auto; display: grid; gap: 20px; }
+
+  header.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 20px; }
+  .brand { display: grid; gap: 2px; }
+  .eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  h1 { margin: 0; font-size: 26px; line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
+  h2 { margin: 0; font-size: 17px; font-weight: 600; text-wrap: balance; }
+  .sync { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+
+  nav.tabs {
+    display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none;
+    border-bottom: 1px solid var(--line); margin-inline: -4px; padding-inline: 4px;
+  }
+  nav.tabs::-webkit-scrollbar { display: none; }
+  nav.tabs a {
+    flex: 0 0 auto; text-decoration: none; color: var(--muted); font-weight: 600; font-size: 14px;
+    padding: 10px 12px; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 6px; border-radius: 6px 6px 0 0;
+  }
+  nav.tabs a:hover { color: var(--ink); }
+  nav.tabs a[aria-current="page"] { color: var(--ink); border-bottom-color: var(--accent); }
+  nav.tabs .count { font-size: 11px; font-weight: 700; background: var(--new-bg); color: var(--new); border-radius: 999px; padding: 1px 7px; font-variant-numeric: tabular-nums; }
+  nav.tabs .count:empty { display: none; }
+
+  button, .btn {
+    font: inherit; font-size: 14px; font-weight: 600;
+    border-radius: 999px; border: 1px solid var(--line);
+    background: var(--surface); color: var(--ink);
+    padding: 8px 14px; cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px; line-height: 1.2;
+    transition: background 0.15s, border-color 0.15s, transform 0.05s;
+  }
+  button:hover, .btn:hover { border-color: var(--muted); }
+  button:active, .btn:active { transform: translateY(1px); }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  button[disabled] { opacity: 0.5; cursor: default; }
+  .btn-wa { background: var(--wa); color: var(--wa-ink); border-color: var(--wa); }
+  .btn-wa:hover { border-color: var(--wa); filter: brightness(1.05); }
+  .btn-ghost { background: transparent; }
+  .btn-sm { font-size: 13px; padding: 5px 11px; }
+
+  input[type="text"], input[type="number"], input[type="search"], select, textarea {
+    font: inherit; font-size: 14px; border: 1px solid var(--line); background: var(--bg); color: var(--ink);
+    border-radius: 10px; padding: 8px 10px; min-width: 0;
+  }
+
+  .view { display: grid; gap: 16px; }
+  .view[hidden] { display: none; }
+  .intro { color: var(--muted); font-size: 14px; margin: 0; max-width: 70ch; }
+
+  .piles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 720px) { .piles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .pile {
+    text-align: left; border-radius: 14px; padding: 12px 14px;
+    background: var(--surface); border: 1px solid var(--line);
+    display: grid; gap: 2px; box-shadow: var(--shadow);
+  }
+  button.pile[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+  .pile .lbl { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .pile .num { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .pile .amt { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: 0 0 auto; }
+  .dot.new { background: var(--new); } .dot.ok { background: var(--ok); } .dot.warn { background: var(--warn); } .dot.bad { background: var(--bad); } .dot.info { background: var(--info); }
+
+  .notice { border-radius: 12px; padding: 12px 14px; font-size: 14px; background: var(--surface-2); border: 1px solid var(--line); }
+  .notice.bad { background: var(--bad-bg); border-color: transparent; }
+  .notice strong { font-weight: 600; }
+
+  .list { display: grid; gap: 12px; }
+  .empty { text-align: center; color: var(--muted); padding: 36px 16px; border: 1px dashed var(--line); border-radius: 14px; }
+
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; box-shadow: var(--shadow); }
+  .order { display: grid; gap: 12px; border-left: 4px solid var(--new); }
+  .order[data-tone="ok"] { border-left-color: var(--ok); }
+  .order[data-tone="warn"] { border-left-color: var(--warn); }
+  .order[data-tone="bad"] { border-left-color: var(--bad); }
+  .order[data-tone="info"] { border-left-color: var(--info); }
+
+  .o-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; justify-content: space-between; }
+  .o-id { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .o-num { font-family: var(--mono); font-weight: 500; font-size: 15px; }
+  .o-age { color: var(--muted); font-size: 13px; }
+  .pill { font-size: 12px; font-weight: 600; border-radius: 999px; padding: 3px 10px; white-space: nowrap; display: inline-block; }
+  .pill.new { background: var(--new-bg); color: var(--new); }
+  .pill.ok { background: var(--ok-bg); color: var(--ok); }
+  .pill.warn { background: var(--warn-bg); color: var(--warn); }
+  .pill.bad { background: var(--bad-bg); color: var(--bad); }
+  .pill.info { background: var(--info-bg); color: var(--info); }
+  .pill.mute { background: var(--surface-2); color: var(--muted); }
+
+  .o-body { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 12px 24px; }
+  @media (max-width: 720px) { .o-body { grid-template-columns: 1fr; } }
+  .o-who { display: grid; gap: 4px; }
+  .o-name { font-weight: 600; font-size: 16px; }
+  .o-phone { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .o-phone .num { font-family: var(--mono); font-size: 14px; user-select: all; }
+  .copy { font-size: 12px; padding: 3px 9px; font-weight: 500; }
+  .o-addr { overflow-wrap: anywhere; }
+  .o-addr .city { color: var(--muted); }
+  .o-what { display: grid; gap: 4px; align-content: start; }
+  .o-items { margin: 0; padding: 0; list-style: none; display: grid; gap: 2px; }
+  .o-items li { overflow-wrap: anywhere; }
+  .o-items .q { color: var(--muted); font-variant-numeric: tabular-nums; margin-right: 4px; }
+  .o-total { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 17px; }
+  .o-total small { font-weight: 500; font-size: 12px; color: var(--muted); margin-left: 4px; }
+
+  .flags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .flag { font-size: 12px; border-radius: 6px; padding: 2px 8px; background: var(--warn-bg); color: var(--warn); font-weight: 500; }
+  .flag.bad { background: var(--bad-bg); color: var(--bad); }
+
+  .o-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  .o-actions .spacer { flex: 1 1 auto; }
+  .act[aria-pressed="true"].a-ok { background: var(--ok-bg); border-color: var(--ok); color: var(--ok); }
+  .act[aria-pressed="true"].a-warn { background: var(--warn-bg); border-color: var(--warn); color: var(--warn); }
+  .act[aria-pressed="true"].a-bad { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+  .act[aria-pressed="true"].a-info { background: var(--info-bg); border-color: var(--info); color: var(--info); }
+  .o-meta { font-size: 12px; color: var(--muted); }
+  .o-note { display: flex; gap: 8px; }
+  .o-note input { flex: 1 1 auto; }
+
+  .ship { display: grid; grid-template-columns: minmax(0, 180px) minmax(0, 1fr); gap: 8px; }
+  @media (max-width: 520px) { .ship { grid-template-columns: 1fr; } }
+  .ship label { display: grid; gap: 4px; font-size: 12px; color: var(--muted); font-weight: 600; }
+  .cash { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; cursor: pointer; }
+  .cash input { width: 18px; height: 18px; accent-color: var(--ok); }
+
+  /* Sales */
+  .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--surface); }
+  .seg button { border: 0; background: transparent; padding: 6px 12px; font-size: 13px; }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+  .kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+  @media (max-width: 720px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: grid; gap: 2px; }
+  .kpi .lbl { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+  .kpi .num { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.15; }
+  .kpi .sub { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .two { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 12px; }
+  @media (max-width: 820px) { .two { grid-template-columns: 1fr; } }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 12px; align-content: start; }
+  .panel .cap { font-size: 13px; color: var(--muted); margin: 0; }
+
+  .chart { position: relative; display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 6px; }
+  .yaxis { position: relative; height: 180px; font-size: 11px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .yaxis span { position: absolute; right: 0; transform: translateY(50%); }
+  .plot { position: relative; height: 180px; border-bottom: 1px solid var(--line); }
+  .grid-line { position: absolute; left: 0; right: 0; border-top: 1px dashed var(--line); }
+  .bars { position: absolute; inset: 0; display: flex; align-items: flex-end; gap: 2px; }
+  .bar-col { flex: 1 1 0; height: 100%; display: flex; align-items: flex-end; justify-content: center; position: relative; cursor: default; }
+  .bar-col .bar { width: 100%; max-width: 28px; background: var(--bar); border-radius: 4px 4px 0 0; min-height: 0; }
+  .bar-col:hover .bar, .bar-col:focus-visible .bar { filter: brightness(1.12); }
+  .bar-col:hover, .bar-col:focus-visible { background: color-mix(in srgb, var(--bar-soft) 45%, transparent); border-radius: 4px; }
+  .xaxis { grid-column: 2; display: flex; gap: 2px; font-size: 11px; color: var(--muted); }
+  .xaxis span { flex: 1 1 0; text-align: center; white-space: nowrap; overflow: visible; }
+  .tip {
+    position: absolute; pointer-events: none; background: var(--ink); color: var(--bg);
+    font-size: 12px; padding: 6px 9px; border-radius: 8px; white-space: nowrap; z-index: 3;
+    transform: translate(-50%, -100%); font-variant-numeric: tabular-nums;
+  }
+  .hbars { display: grid; gap: 10px; }
+  .hbar { display: grid; gap: 4px; }
+  .hbar .top { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; }
+  .hbar .top .n { font-variant-numeric: tabular-nums; color: var(--muted); white-space: nowrap; }
+  .hbar .track { height: 8px; border-radius: 4px; background: var(--surface-2); overflow: hidden; }
+  .hbar .fill { height: 100%; background: var(--bar); border-radius: 0 4px 4px 0; }
+  .funnel { display: grid; gap: 8px; }
+  .funnel .row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: 14px; }
+  .funnel .row .v { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  th { font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); white-space: nowrap; }
+  tr:last-child td { border-bottom: 0; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td .sub { display: block; font-size: 12px; color: var(--muted); }
+  .count-edit { display: inline-flex; gap: 6px; align-items: center; }
+  .count-edit input { width: 76px; text-align: right; }
+  tr.group td { background: var(--surface-2); font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+
+  .cust-list { display: grid; gap: 8px; }
+  details.cust { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
+  details.cust summary { list-style: none; cursor: pointer; padding: 12px 14px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; }
+  details.cust summary::-webkit-details-marker { display: none; }
+  .cust .c-name { font-weight: 600; }
+  .cust .c-sub { font-size: 13px; color: var(--muted); font-family: var(--mono); }
+  .cust .c-right { text-align: right; display: grid; gap: 2px; justify-items: end; }
+  .cust .c-total { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .cust .c-badges { display: flex; gap: 6px; flex-wrap: wrap; grid-column: 1 / -1; }
+  .cust .c-orders { border-top: 1px solid var(--line); padding: 10px 14px 14px; display: grid; gap: 6px; font-size: 14px; }
+  .cust .c-order { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 10px; align-items: center; }
+  @media (max-width: 520px) { .cust .c-order { grid-template-columns: auto minmax(0, 1fr) auto; } .cust .c-order .c-items { grid-column: 1 / -1; order: 5; } }
+  .cust .c-items { color: var(--muted); overflow-wrap: anywhere; }
+
+  details.tpl { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 16px; }
+  details.tpl summary { cursor: pointer; font-weight: 600; }
+  .tpl-body { display: grid; gap: 10px; margin-top: 12px; }
+  .tpl-body textarea { width: 100%; min-height: 150px; line-height: 1.5; resize: vertical; }
+  .tokens { font-size: 13px; color: var(--muted); }
+  .tokens code { font-family: var(--mono); font-size: 12px; background: var(--surface-2); padding: 1px 5px; border-radius: 4px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .foot { font-size: 12px; color: var(--muted); margin: 0; }
+
+  .toast {
+    position: fixed; left: 50%; transform: translateX(-50%);
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px;
+    font-size: 14px; font-weight: 500; box-shadow: 0 6px 24px rgba(0,0,0,0.2); z-index: 10;
+    max-width: calc(100% - 32px);
+  }
+  .skeleton { height: 128px; border-radius: 16px; background: linear-gradient(90deg, var(--surface) 0%, var(--surface-2) 50%, var(--surface) 100%); background-size: 200% 100%; animation: sh 1.4s linear infinite; border: 1px solid var(--line); }
+  @keyframes sh { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+  @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } button, .btn { transition: none; } }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<style>
+  /* app-only additions */
+  body { padding-block: calc(16px + env(safe-area-inset-top, 0px)) calc(40px + env(safe-area-inset-bottom, 0px)); }
+  .setup { max-width: 520px; margin: 0 auto; display: grid; gap: 18px; padding-top: 12px; }
+  .setup .card { display: grid; gap: 14px; }
+  .field { display: grid; gap: 6px; }
+  .field label { font-weight: 600; font-size: 14px; }
+  .field .hint { font-size: 13px; color: var(--muted); }
+  .field input { width: 100%; font-size: 16px; padding: 11px 12px; }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); justify-content: center; padding: 11px 16px; font-size: 15px; }
+  .btn-primary:hover { border-color: var(--accent); filter: brightness(1.08); }
+  .err { color: var(--bad); font-size: 14px; }
+  .steps { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 14px; color: var(--muted); }
+  .steps code, .kv code { font-family: var(--mono); font-size: 12px; background: var(--surface-2); padding: 1px 5px; border-radius: 4px; color: var(--ink); }
+  .kv { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 16px; font-size: 14px; }
+  .kv dt { color: var(--muted); }
+  .kv dd { margin: 0; overflow-wrap: anywhere; }
+  .btn-call { background: var(--surface); }
+  .iconbtn { padding: 7px 10px; }
+  .pack-edit { display: grid; gap: 10px; }
+  .pack-edit .pk { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 8px; }
+  .pack-edit .pk-name { font-weight: 600; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; cursor: pointer; background: var(--bg); }
+  .chip input { accent-color: var(--accent); }
+  /* tables become stacked cards on phones */
+  @media (max-width: 640px) {
+    .rtable thead { display: none; }
+    .rtable, .rtable tbody { display: block; }
+    .rtable tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+    .rtable tr:last-child { border-bottom: 0; }
+    .rtable td { display: block; border: 0; padding: 0; text-align: left !important; }
+    .rtable td[data-label]::before { content: attr(data-label); display: block; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+    .rtable td.full { grid-column: 1 / -1; }
+    .rtable td.name { font-weight: 600; font-size: 15px; }
+    .rtable .count-edit input { width: 100%; flex: 1 1 auto; }
+    .rtable .count-edit { display: flex; }
+  }
+</style>
+
+<!-- SETUP (shown until the store is connected) -->
+<div class="setup" id="setup" hidden>
+  <div class="brand">
+    <span class="eyebrow">Glovia Desk</span>
+    <h1>Connect your Shopify store</h1>
+  </div>
+  <form class="card" id="setupForm" novalidate>
+    <div class="field">
+      <label for="fShop">Store address</label>
+      <input id="fShop" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="yourstore.myshopify.com">
+      <span class="hint">The .myshopify.com address, not your own domain. Find it in Shopify admin under Settings → Domains.</span>
+    </div>
+    <div class="field">
+      <label for="fId">Client ID</label>
+      <input id="fId" type="text" autocomplete="off" autocapitalize="off" spellcheck="false">
+    </div>
+    <div class="field">
+      <label for="fSecret">Client secret</label>
+      <input id="fSecret" type="password" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <span class="hint">Both come from your app's Settings page in the Shopify Dev Dashboard. They stay on this phone.</span>
+    </div>
+    <div class="err" id="setupErr" hidden></div>
+    <button type="submit" class="btn-primary" id="setupBtn">Connect store</button>
+  </form>
+  <p class="foot">Glovia Desk reads your orders and products, and saves order statuses, delivery details and stock counts inside your Shopify store.</p>
+</div>
+
+<!-- MAIN APP -->
+<div class="wrap" id="app" hidden>
+  <header class="top">
+    <div class="brand">
+      <span class="eyebrow" id="shopName">Cash on delivery</span>
+      <h1>Glovia Desk</h1>
+    </div>
+    <div class="sync">
+      <span id="syncText">Loading orders…</span>
+      <button id="refreshBtn" type="button" class="btn-ghost btn-sm">Refresh</button>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Pages">
+    <a href="#confirm" data-tab="confirm">Confirm <span class="count" id="tc-confirm"></span></a>
+    <a href="#deliveries" data-tab="deliveries">Deliveries <span class="count" id="tc-deliveries"></span></a>
+    <a href="#sales" data-tab="sales">Sales</a>
+    <a href="#stock" data-tab="stock">Stock <span class="count" id="tc-stock"></span></a>
+    <a href="#customers" data-tab="customers">Customers</a>
+    <a href="#settings" data-tab="settings">Settings</a>
+  </nav>
+
+  <div id="notice" class="notice" hidden></div>
+
+  <!-- CONFIRM -->
+  <section class="view" data-view="confirm">
+    <div class="piles" role="group" aria-label="Filter orders to confirm">
+      <button class="pile" type="button" data-cfilter="todo" aria-pressed="true">
+        <span class="lbl"><span class="dot new"></span>To confirm</span>
+        <span class="num" id="n-todo">–</span><span class="amt" id="a-todo">&nbsp;</span>
+      </button>
+      <button class="pile" type="button" data-cfilter="confirmed" aria-pressed="false">
+        <span class="lbl"><span class="dot ok"></span>Confirmed</span>
+        <span class="num" id="n-confirmed">–</span><span class="amt" id="a-confirmed">&nbsp;</span>
+      </button>
+      <button class="pile" type="button" data-cfilter="noanswer" aria-pressed="false">
+        <span class="lbl"><span class="dot warn"></span>No answer</span>
+        <span class="num" id="n-noanswer">–</span><span class="amt" id="a-noanswer">&nbsp;</span>
+      </button>
+      <button class="pile" type="button" data-cfilter="cancelled" aria-pressed="false">
+        <span class="lbl"><span class="dot bad"></span>Cancelled / fake</span>
+        <span class="num" id="n-cancelled">–</span><span class="amt" id="a-cancelled">&nbsp;</span>
+      </button>
+    </div>
+    <div class="list" id="confirmList" aria-live="polite"><div class="skeleton"></div><div class="skeleton"></div></div>
+  </section>
+
+  <!-- DELIVERIES -->
+  <section class="view" data-view="deliveries" hidden>
+    <p class="intro">Every confirmed order lands here. Book it with your courier, add the tracking number, then mark it delivered or returned. Tick <strong>Cash received</strong> once the courier pays you.</p>
+    <div class="piles" role="group" aria-label="Filter deliveries">
+      <button class="pile" type="button" data-dfilter="tobook" aria-pressed="true">
+        <span class="lbl"><span class="dot new"></span>To book</span>
+        <span class="num" id="n-tobook">–</span><span class="amt" id="a-tobook">&nbsp;</span>
+      </button>
+      <button class="pile" type="button" data-dfilter="transit" aria-pressed="false">
+        <span class="lbl"><span class="dot info"></span>On the way</span>
+        <span class="num" id="n-transit">–</span><span class="amt" id="a-transit">&nbsp;</span>
+      </button>
+      <button class="pile" type="button" data-dfilter="cashdue" aria-pressed="false">
+        <span class="lbl"><span class="dot warn"></span>Cash to collect</span>
+        <span class="num" id="n-cashdue">–</span><span class="amt" id="a-cashdue">&nbsp;</span>
+      </button>
+      <button class="pile" type="button" data-dfilter="done" aria-pressed="false">
+        <span class="lbl"><span class="dot ok"></span>Paid / returned</span>
+        <span class="num" id="n-done">–</span><span class="amt" id="a-done">&nbsp;</span>
+      </button>
+    </div>
+    <div class="list" id="deliveryList"></div>
+  </section>
+
+  <!-- SALES -->
+  <section class="view" data-view="sales" hidden>
+    <div class="toolbar">
+      <h2 id="salesTitle">Sales</h2>
+      <div class="seg" role="group" aria-label="Time range">
+        <button type="button" data-range="7" aria-pressed="false">7 days</button>
+        <button type="button" data-range="30" aria-pressed="true">30 days</button>
+        <button type="button" data-range="0" aria-pressed="false">All time</button>
+      </div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+    <div class="two">
+      <div class="panel">
+        <div><h2>Orders per day</h2><p class="cap" id="chartCap">Orders placed, including ones later cancelled.</p></div>
+        <div id="dayChart"></div>
+      </div>
+      <div class="panel">
+        <div><h2>What happened to the orders</h2><p class="cap">Orders placed in this period, by where they are now.</p></div>
+        <div class="funnel" id="funnel"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div><h2>Best sellers</h2><p class="cap">Units in orders that weren't cancelled.</p></div>
+      <div class="hbars" id="topProducts"></div>
+    </div>
+  </section>
+
+  <!-- STOCK -->
+  <section class="view" data-view="stock" hidden>
+    <p class="intro">Enter what's on the shelf, and every order after that is taken off automatically. A pack takes one of each product inside it. Cancelled orders don't count, and returned parcels go back on the shelf.</p>
+    <div class="piles" id="stockPiles"></div>
+    <div class="table-wrap">
+      <table class="rtable">
+        <thead>
+          <tr><th>Product</th><th class="num">Counted</th><th class="num">Sold since</th><th class="num">Left now</th><th class="num">Days left</th><th>Status</th><th>Update count</th></tr>
+        </thead>
+        <tbody id="stockBody"></tbody>
+      </table>
+    </div>
+    <div class="table-wrap">
+      <table class="rtable">
+        <thead><tr><th>Pack</th><th>Contains</th><th class="num">Packs you can make</th><th class="num">Sold (30 days)</th></tr></thead>
+        <tbody id="packBody"></tbody>
+      </table>
+    </div>
+    <div class="row">
+      <label for="lowAt" class="tokens">Warn me when a product falls to</label>
+      <input type="number" id="lowAt" min="0" step="1" style="width: 80px">
+      <span class="tokens">units or fewer</span>
+      <button type="button" class="btn-sm" id="lowSave">Save</button>
+    </div>
+  </section>
+
+  <!-- CUSTOMERS -->
+  <section class="view" data-view="customers" hidden>
+    <div class="toolbar">
+      <input type="search" id="custSearch" placeholder="Search name, phone or city" aria-label="Search customers" style="flex: 1 1 260px; max-width: 420px;">
+      <div class="seg" role="group" aria-label="Show customers">
+        <button type="button" data-cust="all" aria-pressed="true">All</button>
+        <button type="button" data-cust="repeat" aria-pressed="false">Repeat</button>
+        <button type="button" data-cust="risky" aria-pressed="false">Risky</button>
+      </div>
+    </div>
+    <div class="piles" id="custPiles"></div>
+    <div class="cust-list" id="custList"></div>
+    <p class="foot">Customers are grouped by phone number. <strong>Risky</strong> means that number has cancelled, refused or returned an order before.</p>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="view" data-view="settings" hidden>
+    <div class="panel">
+      <h2>Store</h2>
+      <dl class="kv" id="storeInfo"></dl>
+      <div class="row">
+        <button type="button" id="testBtn">Test connection</button>
+        <button type="button" id="logoutBtn" class="btn-ghost">Disconnect this phone</button>
+      </div>
+    </div>
+
+    <details class="tpl" id="tplBox" open>
+      <summary>WhatsApp confirmation message</summary>
+      <div class="tpl-body">
+        <label for="tplText" class="tokens">Filled in for each customer when you tap <strong>WhatsApp</strong>. Placeholders:
+          <code>{name}</code> <code>{order}</code> <code>{items}</code> <code>{total}</code> <code>{address}</code> <code>{city}</code></label>
+        <textarea id="tplText"></textarea>
+        <div class="row">
+          <button type="button" id="tplSave">Save message</button>
+          <button type="button" id="tplReset" class="btn-ghost">Restore default</button>
+          <span class="tokens" id="tplStatus"></span>
+        </div>
+      </div>
+    </details>
+
+    <details class="tpl">
+      <summary>What's inside each pack</summary>
+      <div class="tpl-body">
+        <p class="tokens">Tick the products inside each pack. The Stock page takes one of each off the shelf when a pack sells.</p>
+        <div class="pack-edit" id="packEdit"></div>
+        <div class="row"><button type="button" id="packSave">Save packs</button><span class="tokens" id="packStatus"></span></div>
+      </div>
+    </details>
+
+    <p class="foot">Statuses show in Shopify admin as order tags (COD Confirmed, Courier Booked, Delivered and so on). Tapping WhatsApp only opens the chat; press send in WhatsApp yourself. <span id="appVer"></span></p>
+  </section>
+</div>
+
+<div id="toast" class="toast" role="status" hidden></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var APP_VERSION = "1.0.0";
+  var API_VERSION = "2026-07";
+  var NS = "$app:glovia";
+
+  var DEFAULT_TPL =
+    "Assalam o Alaikum {name}! 🌸\n\n" +
+    "Glovia Skin se aapka order {order} mila hai:\n{items}\n\n" +
+    "Total: Rs {total} (Cash on Delivery)\n" +
+    "Address: {address}, {city}\n\n" +
+    "Order confirm karne ke liye please \"YES\" reply karein. Delivery 3 se 5 din mein ho jaye gi.\n\n" +
+    "Shukriya! — Team Glovia Skin";
+
+  // Glovia Skin's packs, used only if the store has no pack setup saved yet
+  // and these products exist in it.
+  var STARTER_PACKS = {
+    "10193252090077": ["10193252548829", "10193252614365", "10193252483293", "10193252450525"],
+    "10193251991773": ["10193252188381", "10193252122845", "10193252614365", "10193252450525"],
+    "10193252057309": ["10193252188381", "10193252155613", "10193252122845"],
+    "10193252024541": ["10193252614365", "10193252548829", "10193252417757"]
+  };
+
+  var COURIERS = ["", "TCS", "Leopards", "PostEx", "Trax", "M&P", "Call Courier", "BlueEx", "Rider", "Pakistan Post", "Other"];
+  var CSTATUS = {
+    new: { label: "New", tone: "new" },
+    confirmed: { label: "Confirmed", tone: "ok" },
+    noanswer: { label: "No answer", tone: "warn" },
+    cancelled: { label: "Cancelled", tone: "bad" }
+  };
+  var STAGE = {
+    tobook: { label: "To book", tone: "new" },
+    booked: { label: "On the way", tone: "info" },
+    delivered: { label: "Delivered", tone: "ok" },
+    returned: { label: "Returned", tone: "bad" }
+  };
+  var OUR_TAGS = ["COD Confirmed", "COD No Answer", "COD Cancelled", "Courier Booked", "Delivered", "Returned", "Cash Received"];
+
+  var state = {
+    shopId: null, shopName: "", orders: [], products: [], statuses: {},
+    settings: { template: DEFAULT_TPL, lowAt: 10, packs: {}, stock: {} },
+    fetchedAt: null, fromCache: false, loading: true,
+    tab: "confirm", cfilter: "todo", dfilter: "tobook", range: 30, custFilter: "all", custQuery: ""
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ---------- storage on the phone ----------
+  function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function lsDel(k) { try { localStorage.removeItem(k); } catch (e) {} }
+  var cfg = lsGet("gd-config");
+
+  // ---------- helpers ----------
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function rs(n) { return "Rs " + Math.round(Number(n) || 0).toLocaleString("en-PK"); }
+  function pct(a, b) { return b ? Math.round((a / b) * 100) + "%" : "–"; }
+  function ago(iso) {
+    var t = typeof iso === "number" ? iso : Date.parse(iso); if (!t) return "";
+    var s = Math.max(0, (Date.now() - t) / 1000);
+    if (s < 60) return "just now";
+    if (s < 3600) return Math.floor(s / 60) + " min ago";
+    if (s < 86400) return Math.floor(s / 3600) + " h ago";
+    var d = Math.floor(s / 86400); return d + (d === 1 ? " day ago" : " days ago");
+  }
+  function pkTime(iso) {
+    var t = typeof iso === "number" ? iso : Date.parse(iso); if (!t) return "";
+    try { return new Date(t).toLocaleString("en-PK", { timeZone: "Asia/Karachi", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }); }
+    catch (e) { return new Date(t).toLocaleString(); }
+  }
+  function pkDayKey(t) {
+    try { return new Date(t).toLocaleDateString("en-CA", { timeZone: "Asia/Karachi" }); }
+    catch (e) { return new Date(t).toISOString().slice(0, 10); }
+  }
+  function waNumber(raw) {
+    var d = String(raw || "").replace(/\D/g, "");
+    if (!d) return "";
+    if (d.indexOf("0092") === 0) d = d.slice(2);
+    if (d.indexOf("92") === 0 && d.length === 12) return d;
+    if (d.charAt(0) === "0" && d.length === 11) return "92" + d.slice(1);
+    if (d.charAt(0) === "3" && d.length === 10) return "92" + d;
+    return d;
+  }
+  function prettyPhone(raw) {
+    var n = waNumber(raw);
+    if (n.length === 12 && n.indexOf("92") === 0) return "0" + n.slice(2, 5) + " " + n.slice(5);
+    return String(raw || "");
+  }
+  function keyOf(gid) { return String(gid || "").split("/").pop(); }
+  function shortTitle(t) { return String(t || "").replace(/^Glovia Skin\s+/i, "").replace(/\s+—.*$/, ""); }
+  function parseJson(v) { if (!v) return null; try { return JSON.parse(v); } catch (e) { return null; } }
+
+  var toastTimer = null;
+  function toast(msg) {
+    var t = $("toast"); t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 2600);
+  }
+  function showNotice(html, kind) {
+    var n = $("notice");
+    if (!html) { n.hidden = true; n.innerHTML = ""; return; }
+    n.className = "notice" + (kind ? " " + kind : ""); n.innerHTML = html; n.hidden = false;
+  }
+
+  // ---------- Shopify API ----------
+  function normalizeShop(v) {
+    var s = String(v || "").trim().toLowerCase().replace(/^https?:\/\//, "").replace(/\/.*$/, "");
+    if (s && s.indexOf(".") < 0) s += ".myshopify.com";
+    return s;
+  }
+  function ShopError(code, message, extra) { this.code = code; this.message = message; this.extra = extra; }
+
+  function getToken(force) {
+    var t = lsGet("gd-token");
+    if (!force && t && t.shop === cfg.shop && t.clientId === cfg.clientId && t.exp > Date.now() + 10 * 60000) return Promise.resolve(t.token);
+    var body = "grant_type=client_credentials&client_id=" + encodeURIComponent(cfg.clientId) + "&client_secret=" + encodeURIComponent(cfg.clientSecret);
+    return fetch("https://" + cfg.shop + "/admin/oauth/access_token", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
+      body: body
+    }).then(function (r) {
+      return r.text().then(function (txt) {
+        var j = parseJson(txt);
+        if (!r.ok || !j || !j.access_token) {
+          var reason = (j && (j.error_description || j.error || (j.errors && JSON.stringify(j.errors)))) || ("HTTP " + r.status);
+          throw new ShopError("auth", reason, { status: r.status, raw: String(txt).slice(0, 300) });
+        }
+        lsSet("gd-token", { shop: cfg.shop, clientId: cfg.clientId, token: j.access_token, scope: j.scope || "", exp: Date.now() + (j.expires_in || 86399) * 1000 });
+        return j.access_token;
+      });
+    }, function () { throw new ShopError("network", "No internet connection, or the store address is wrong."); });
+  }
+
+  function gql(query, variables, retried) {
+    return getToken(false).then(function (token) {
+      return fetch("https://" + cfg.shop + "/admin/api/" + API_VERSION + "/graphql.json", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json", "X-Shopify-Access-Token": token },
+        body: JSON.stringify({ query: query, variables: variables || {} })
+      }).then(function (r) {
+        if (r.status === 401 && !retried) { lsDel("gd-token"); return gql(query, variables, true); }
+        return r.text().then(function (txt) {
+          var j = parseJson(txt);
+          if (r.status === 402) throw new ShopError("store", "The store isn't available right now (it may be paused or on a closed plan).");
+          if (r.status === 403) throw new ShopError("scope", "The app is missing a permission. " + ((j && j.errors) ? JSON.stringify(j.errors) : ""));
+          if (r.status === 429) throw new ShopError("busy", "Shopify is busy. Try again in a moment.");
+          if (!r.ok || !j) throw new ShopError("http", "Shopify answered with an error (HTTP " + r.status + ").");
+          if (j.errors && j.errors.length) {
+            var m = j.errors.map(function (e) { return e.message; }).join("; ");
+            if (/access denied|not approved|protected customer data/i.test(m)) throw new ShopError("scope", m);
+            throw new ShopError("gql", m);
+          }
+          return j.data;
+        });
+      }, function () { throw new ShopError("network", "No internet connection."); });
+    });
+  }
+
+  function explain(err) {
+    var m = (err && err.message) || "Something went wrong.";
+    switch (err && err.code) {
+      case "network": return "<strong>Can't reach Shopify.</strong> Check your internet connection, then press Refresh.";
+      case "auth":
+        if (/shop_not_permitted|cannot be performed on this shop/i.test(m)) return "<strong>Shopify refused the connection.</strong> The app and the store must belong to the same Shopify organization in the Dev Dashboard.";
+        if (/application_cannot_be_found|invalid_client|client/i.test(m)) return "<strong>Shopify didn't accept the Client ID or secret.</strong> Copy them again from the Dev Dashboard, and make sure the app is installed on this store.";
+        return "<strong>Shopify refused the connection:</strong> " + esc(m);
+      case "scope": return "<strong>The app is missing a permission.</strong> In the Dev Dashboard, give it read_orders, write_orders, read_products and read_customers, allow protected customer data (name, phone, address), release a new version and reinstall it. <span class=\"tokens\">" + esc(m) + "</span>";
+      case "busy": return "<strong>Shopify is busy.</strong> Try again in a moment.";
+      default: return "<strong>Couldn't load from Shopify.</strong> " + esc(m);
+    }
+  }
+
+  var ORDERS_Q = "query Orders($after: String) { orders(first: 100, after: $after, sortKey: CREATED_AT, reverse: true) { " +
+    "pageInfo { hasNextPage endCursor } nodes { id name createdAt cancelledAt displayFulfillmentStatus note tags " +
+    "totalPriceSet { shopMoney { amount } } phone customer { displayName defaultPhoneNumber { phoneNumber } } " +
+    "shippingAddress { name phone address1 address2 city } " +
+    "lineItems(first: 20) { nodes { title quantity product { id } originalTotalSet { shopMoney { amount } } } } " +
+    "state: metafield(namespace: \"" + NS + "\", key: \"state\") { value } } } }";
+  var META_Q = "query Meta { shop { id name settings: metafield(namespace: \"" + NS + "\", key: \"settings\") { value } } " +
+    "products(first: 100, sortKey: TITLE) { nodes { id title status productType variants(first: 1) { nodes { price } } } } }";
+  var SETTINGS_Q = "query S { shop { id settings: metafield(namespace: \"" + NS + "\", key: \"settings\") { value } } }";
+  var MF_MUT = "mutation M($mf: [MetafieldsSetInput!]!) { metafieldsSet(metafields: $mf) { userErrors { field message } } }";
+
+  function normOrder(x) {
+    var a = x.shippingAddress || {};
+    var phone = a.phone || x.phone || (x.customer && x.customer.defaultPhoneNumber && x.customer.defaultPhoneNumber.phoneNumber) || "";
+    return {
+      gid: x.id, key: keyOf(x.id), name: x.name || "", createdAt: x.createdAt || "",
+      cancelled: !!x.cancelledAt, fulfillment: x.displayFulfillmentStatus || "", tags: x.tags || [],
+      customer: a.name || (x.customer && x.customer.displayName) || "Customer",
+      phone: phone, address: [a.address1, a.address2].filter(Boolean).join(", "), city: a.city || "",
+      total: Number(x.totalPriceSet && x.totalPriceSet.shopMoney && x.totalPriceSet.shopMoney.amount) || 0,
+      items: ((x.lineItems && x.lineItems.nodes) || []).map(function (li) {
+        return { title: li.title, qty: li.quantity, productId: li.product ? keyOf(li.product.id) : "",
+                 amount: Number(li.originalTotalSet && li.originalTotalSet.shopMoney && li.originalTotalSet.shopMoney.amount) || 0 };
+      }),
+      shopNote: x.note || "",
+      state: parseJson(x.state && x.state.value)
+    };
+  }
+
+  function applySettings(raw) {
+    var s = raw || {};
+    state.settings = {
+      template: s.template || DEFAULT_TPL,
+      lowAt: typeof s.lowAt === "number" ? s.lowAt : 10,
+      packs: s.packs && typeof s.packs === "object" ? s.packs : null,
+      stock: s.stock && typeof s.stock === "object" ? s.stock : {}
+    };
+    if (!state.settings.packs) {
+      var ids = {}; state.products.forEach(function (p) { ids[p.id] = true; });
+      var starter = {};
+      Object.keys(STARTER_PACKS).forEach(function (pid) {
+        if (ids[pid] && STARTER_PACKS[pid].every(function (c) { return ids[c]; })) starter[pid] = { contains: STARTER_PACKS[pid] };
+      });
+      state.settings.packs = starter;
+    }
+    if (document.activeElement !== $("tplText")) $("tplText").value = state.settings.template;
+  }
+
+  var inFlight = false, retried = false;
+  function loadAll(manual) {
+    if (inFlight) return;
+    inFlight = true; $("refreshBtn").disabled = true;
+    if (manual) $("syncText").textContent = "Refreshing…";
+    var orders = [];
+    function page(after, n) {
+      return gql(ORDERS_Q, { after: after }).then(function (d) {
+        var c = d.orders;
+        c.nodes.forEach(function (x) { orders.push(normOrder(x)); });
+        if (c.pageInfo.hasNextPage && n < 4) return page(c.pageInfo.endCursor, n + 1);
+      });
+    }
+    gql(META_Q).then(function (m) {
+      state.shopId = m.shop.id; state.shopName = m.shop.name;
+      state.products = m.products.nodes.map(function (x) {
+        return { id: keyOf(x.id), title: x.title, type: x.productType || "", active: x.status === "ACTIVE",
+                 price: Number(x.variants && x.variants.nodes[0] && x.variants.nodes[0].price) || 0 };
+      });
+      applySettings(parseJson(m.shop.settings && m.shop.settings.value));
+      return page(null, 0);
+    }).then(function () {
+      state.orders = orders;
+      var st = {};
+      orders.forEach(function (o) {
+        if (pending[o.key]) st[o.key] = state.statuses[o.key];   // keep a change that is still saving
+        else if (o.state) st[o.key] = o.state;
+      });
+      state.statuses = st;
+      state.fetchedAt = Date.now(); state.fromCache = false; state.loading = false; retried = false;
+      $("shopName").textContent = state.shopName || "Cash on delivery";
+      showNotice(null);
+      saveCache(); setSync(); renderAll();
+    }).catch(function (err) {
+      state.loading = false;
+      if (err && err.code === "busy" && !retried) { retried = true; setTimeout(function () { loadAll(false); }, 2000 + Math.random() * 1500); return; }
+      showNotice(explain(err) + (state.orders.length ? " Showing the orders saved on this phone." : ""), "bad");
+      setSync(); renderAll();
+    }).then(function () { inFlight = false; $("refreshBtn").disabled = false; });
+  }
+
+  function saveCache() {
+    lsSet("gd-cache", { shop: cfg.shop, shopId: state.shopId, shopName: state.shopName, orders: state.orders, products: state.products,
+                        statuses: state.statuses, settings: state.settings, fetchedAt: state.fetchedAt });
+  }
+  function loadCache() {
+    var c = lsGet("gd-cache");
+    if (!c || c.shop !== cfg.shop) return;
+    state.shopId = c.shopId; state.shopName = c.shopName || "";
+    state.orders = c.orders || []; state.products = c.products || []; state.statuses = c.statuses || {};
+    state.fetchedAt = c.fetchedAt; state.fromCache = true; state.loading = false;
+    applySettings(c.settings);
+    $("shopName").textContent = state.shopName || "Cash on delivery";
+  }
+
+  // ---------- saving to Shopify ----------
+  function desiredTags(s) {
+    var t = [];
+    if (s.status === "confirmed") t.push("COD Confirmed");
+    if (s.status === "noanswer") t.push("COD No Answer");
+    if (s.status === "cancelled") t.push("COD Cancelled");
+    var d = s.delivery || {};
+    if (s.status === "confirmed") {
+      if (d.stage === "booked") t.push("Courier Booked");
+      if (d.stage === "delivered") { t.push("Delivered"); if (d.cashReceived) t.push("Cash Received"); }
+      if (d.stage === "returned") t.push("Returned");
+    }
+    return t;
+  }
+
+  var pending = {}, chains = {};
+  function patchOrder(o, patch) {
+    var prev = state.statuses[o.key] || { status: "new", attempts: 0, note: "" };
+    var next = Object.assign({}, prev, patch, { updatedAt: new Date().toISOString() });
+    if (patch.delivery) next.delivery = Object.assign({}, prev.delivery || {}, patch.delivery);
+    state.statuses[o.key] = next;
+    pending[o.key] = (pending[o.key] || 0) + 1;
+    renderAll(); saveCache();
+
+    var add = desiredTags(next);
+    var remove = OUR_TAGS.filter(function (t) { return add.indexOf(t) < 0 && o.tags.indexOf(t) >= 0; });
+    var parts = [], vars = { id: o.gid, mf: [{ ownerId: o.gid, namespace: NS, key: "state", type: "json", value: JSON.stringify(next) }] };
+    var decl = ["$id: ID!", "$mf: [MetafieldsSetInput!]!"];
+    if (remove.length) { decl.push("$remove: [String!]!"); vars.remove = remove; parts.push("rm: tagsRemove(id: $id, tags: $remove) { userErrors { message } }"); }
+    var toAdd = add.filter(function (t) { return o.tags.indexOf(t) < 0; });
+    if (toAdd.length) { decl.push("$add: [String!]!"); vars.add = toAdd; parts.push("ad: tagsAdd(id: $id, tags: $add) { userErrors { message } }"); }
+    parts.push("mf: metafieldsSet(metafields: $mf) { userErrors { message } }");
+    var q = "mutation Save(" + decl.join(", ") + ") { " + parts.join(" ") + " }";
+
+    var run = (chains[o.key] || Promise.resolve()).then(function () { return gql(q, vars); }).then(function (d) {
+      var errs = [];
+      ["rm", "ad", "mf"].forEach(function (k) { if (d[k] && d[k].userErrors && d[k].userErrors.length) errs = errs.concat(d[k].userErrors.map(function (e) { return e.message; })); });
+      if (errs.length) throw new ShopError("gql", errs.join("; "));
+      o.tags = o.tags.filter(function (t) { return remove.indexOf(t) < 0; }).concat(toAdd);
+      o.state = next;
+    });
+    chains[o.key] = run.catch(function () {});
+    return run.then(function () {
+      pending[o.key]--; saveCache();
+    }, function (err) {
+      pending[o.key]--;
+      toast(err && err.code === "network" ? "No internet. That change wasn't saved." : "Couldn't save to Shopify: " + ((err && err.message) || "error"));
+      if (err && err.code === "scope") showNotice(explain(err), "bad");
+      state.statuses[o.key] = prev; renderAll(); saveCache();
+      throw err;
+    });
+  }
+
+  function saveSettings(mutator) {
+    return gql(SETTINGS_Q).then(function (d) {
+      var cur = parseJson(d.shop.settings && d.shop.settings.value) || {};
+      mutator(cur);
+      return gql(MF_MUT, { mf: [{ ownerId: d.shop.id, namespace: NS, key: "settings", type: "json", value: JSON.stringify(cur) }] }).then(function (r) {
+        var ue = r.metafieldsSet.userErrors;
+        if (ue && ue.length) throw new ShopError("gql", ue.map(function (e) { return e.message; }).join("; "));
+        applySettings(cur); saveCache(); renderAll();
+      });
+    });
+  }
+
+  // ---------- derived state ----------
+  function rec(o) { return state.statuses[o.key] || {}; }
+  function cstatus(o) { var s = rec(o).status; return CSTATUS[s] ? s : "new"; }
+  function stage(o) { var d = rec(o).delivery; return (d && STAGE[d.stage]) ? d.stage : "tobook"; }
+  function isDead(o) { return o.cancelled || cstatus(o) === "cancelled"; }
+  function isShippedInShopify(o) { return o.fulfillment === "FULFILLED" || o.fulfillment === "PARTIALLY_FULFILLED"; }
+
+  function customerIndex() {
+    var idx = {};
+    state.orders.forEach(function (o) {
+      var k = waNumber(o.phone) || ("no-phone-" + o.key);
+      var c = idx[k] || (idx[k] = { key: k, phone: o.phone, name: o.customer, city: o.city, orders: [], last: 0, value: 0, good: 0, bad: 0, delivered: 0 });
+      c.orders.push(o);
+      var t = Date.parse(o.createdAt) || 0;
+      if (t >= c.last) { c.last = t; c.name = o.customer; c.city = o.city || c.city; }
+      if (isDead(o) || stage(o) === "returned") c.bad++; else { c.good++; c.value += o.total; }
+      if (cstatus(o) === "confirmed" && stage(o) === "delivered") c.delivered++;
+    });
+    return idx;
+  }
+
+  // ---------- tabs ----------
+  var TABS = ["confirm", "deliveries", "sales", "stock", "customers", "settings"];
+  function setTab(t) {
+    if (TABS.indexOf(t) < 0) t = "confirm";
+    state.tab = t;
+    document.querySelectorAll("[data-view]").forEach(function (v) { v.hidden = v.getAttribute("data-view") !== t; });
+    document.querySelectorAll("nav.tabs a").forEach(function (a) {
+      if (a.getAttribute("data-tab") === t) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+    renderAll();
+  }
+  window.addEventListener("hashchange", function () { setTab(location.hash.slice(1)); });
+
+  // ---------- order card ----------
+  function orderCard(o, opts) {
+    var s = rec(o), wa = waNumber(o.phone);
+    var itemsHtml = '<ul class="o-items">' + o.items.map(function (i) {
+      return '<li><span class="q">' + esc(i.qty) + "×</span>" + esc(i.title) + "</li>";
+    }).join("") + "</ul>";
+    return (
+      '<article class="card order" data-tone="' + opts.tone + '" data-key="' + esc(o.key) + '">' +
+        '<div class="o-head"><div class="o-id"><span class="o-num">' + esc(o.name) + "</span>" +
+          '<span class="o-age">' + esc(ago(o.createdAt)) + " · " + esc(pkTime(o.createdAt)) + "</span></div>" +
+          '<span class="pill ' + opts.tone + '">' + esc(opts.pill) + "</span></div>" +
+        (opts.flags && opts.flags.length ? '<div class="flags">' + opts.flags.map(function (f) {
+          return '<span class="flag' + (f.bad ? " bad" : "") + '">' + esc(f.text) + "</span>"; }).join("") + "</div>" : "") +
+        '<div class="o-body"><div class="o-who">' +
+          '<div class="o-name">' + esc(o.customer) + "</div>" +
+          '<div class="o-phone"><span class="num">' + esc(prettyPhone(o.phone) || "No phone") + "</span>" +
+            (o.phone ? '<button type="button" class="copy" data-act="copy">Copy</button>' : "") +
+            (wa ? '<button type="button" class="copy" data-act="call">Call</button>' : "") + "</div>" +
+          '<div class="o-addr">' + esc(o.address || "No address") + (o.city ? ' <span class="city">· ' + esc(o.city) + "</span>" : "") + "</div>" +
+          (o.shopNote ? '<div class="o-meta">Customer note: ' + esc(o.shopNote) + "</div>" : "") +
+        "</div><div class=\"o-what\">" + itemsHtml +
+          '<div class="o-total">' + rs(o.total) + "<small>to collect</small></div></div></div>" +
+        (opts.extra || "") +
+        '<div class="o-actions">' + opts.actions + "</div>" +
+        '<div class="o-note"><input type="text" id="note-' + esc(opts.view) + "-" + esc(o.key) + '" data-act="note" placeholder="Add a note, e.g. deliver after 5pm" value="' + esc(s.note || "") + '" aria-label="Note for ' + esc(o.name) + '"></div>' +
+        (opts.meta && opts.meta.length ? '<div class="o-meta">' + esc(opts.meta.join(" · ")) + "</div>" : "") +
+      "</article>"
+    );
+  }
+
+  function keepFocus(container, fn) {
+    var ae = document.activeElement, kf = null;
+    if (ae && container.contains(ae) && ae.id && (ae.tagName === "INPUT" || ae.tagName === "SELECT")) {
+      kf = { id: ae.id, value: ae.value, start: ae.selectionStart, end: ae.selectionEnd };
+    }
+    fn();
+    if (kf) {
+      var el = document.getElementById(kf.id);
+      if (el) { el.value = kf.value; el.focus(); try { el.setSelectionRange(kf.start, kf.end); } catch (e) {} }
+    }
+  }
+
+  // ---------- CONFIRM ----------
+  function confirmScope() {
+    return state.orders.filter(function (o) {
+      if (o.cancelled) return false;
+      var st = cstatus(o);
+      if (st === "confirmed") return stage(o) === "tobook" && !isShippedInShopify(o);
+      if (st === "cancelled") return true;
+      return !isShippedInShopify(o);
+    });
+  }
+  function cInFilter(o, f) { var st = cstatus(o); return f === "todo" ? (st === "new" || st === "noanswer") : st === f; }
+
+  function renderConfirm() {
+    var scope = confirmScope(), cidx = customerIndex(), phoneCounts = {};
+    scope.forEach(function (o) { var n = waNumber(o.phone); if (n && cstatus(o) !== "cancelled") phoneCounts[n] = (phoneCounts[n] || 0) + 1; });
+    ["todo", "confirmed", "noanswer", "cancelled"].forEach(function (f) {
+      var list = scope.filter(function (o) { return cInFilter(o, f); });
+      var none = state.loading && !state.orders.length;
+      $("n-" + f).textContent = none ? "–" : list.length;
+      $("a-" + f).textContent = none ? " " : rs(list.reduce(function (a, o) { return a + o.total; }, 0));
+      if (f === "todo") $("tc-confirm").textContent = list.length ? list.length : "";
+    });
+    document.querySelectorAll("[data-cfilter]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-cfilter") === state.cfilter)); });
+
+    var box = $("confirmList");
+    if (state.loading && !state.orders.length) return;
+    var shown = scope.filter(function (o) { return cInFilter(o, state.cfilter); });
+    if (!shown.length) {
+      box.innerHTML = '<div class="empty">' + esc({
+        todo: scope.length ? "Nothing waiting. Every open order has been handled." : "No open orders right now.",
+        confirmed: "No confirmed orders waiting to be booked. Booked ones are on the Deliveries page.",
+        noanswer: "No one is marked as not answering.",
+        cancelled: "No cancelled or fake orders."
+      }[state.cfilter]) + "</div>";
+      return;
+    }
+    keepFocus(box, function () {
+      box.innerHTML = shown.map(function (o) {
+        var st = cstatus(o), s = rec(o), wa = waNumber(o.phone), flags = [];
+        if (!wa) flags.push({ text: "No phone number" });
+        else if (!(wa.length === 12 && wa.indexOf("923") === 0)) flags.push({ text: "Phone doesn't look like a Pakistani mobile" });
+        if (wa && phoneCounts[wa] > 1) flags.push({ text: "Same phone on " + phoneCounts[wa] + " open orders" });
+        var c = wa && cidx[wa];
+        if (c && c.orders.some(function (x) { return x.key !== o.key && (isDead(x) || stage(x) === "returned"); })) flags.push({ text: "This number cancelled or returned before", bad: true });
+        if (c && c.delivered > 0) flags.push({ text: "Repeat buyer · " + c.delivered + " delivered" });
+        if ((o.address || "").replace(/[^A-Za-z0-9]/g, "").length < 12) flags.push({ text: "Very short address" });
+        var meta = [];
+        if (s.waOpenedAt) meta.push("WhatsApp opened " + ago(s.waOpenedAt));
+        if (s.attempts) meta.push(s.attempts + (s.attempts === 1 ? " try with no answer" : " tries with no answer"));
+        if (s.updatedAt && st !== "new") meta.push(CSTATUS[st].label + " " + ago(s.updatedAt));
+        var actions =
+          (wa ? '<button type="button" class="btn btn-wa" data-act="wa">WhatsApp</button>' : "") +
+          '<span class="spacer"></span>' +
+          '<button type="button" class="act a-ok" data-act="confirmed" aria-pressed="' + (st === "confirmed") + '">Confirmed</button>' +
+          '<button type="button" class="act a-warn" data-act="noanswer" aria-pressed="' + (st === "noanswer") + '">No answer</button>' +
+          '<button type="button" class="act a-bad" data-act="cancelled" aria-pressed="' + (st === "cancelled") + '">Cancel / fake</button>' +
+          (st !== "new" ? '<button type="button" class="btn-ghost" data-act="reset">Undo</button>' : "");
+        return orderCard(o, { view: "c", tone: CSTATUS[st].tone, pill: CSTATUS[st].label, flags: flags, actions: actions, meta: meta });
+      }).join("");
+    });
+  }
+
+  function fillTemplate(o) {
+    var items = o.items.map(function (i) { return "• " + i.qty + " × " + i.title; }).join("\n");
+    var map = { name: (o.customer || "").split(" ")[0] || o.customer, order: o.name, items: items,
+                total: Math.round(o.total).toLocaleString("en-PK"), address: o.address, city: o.city };
+    return (state.settings.template || DEFAULT_TPL).replace(/\{(name|order|items|total|address|city)\}/g, function (_, k) { return map[k] == null ? "" : map[k]; });
+  }
+
+  // ---------- DELIVERIES ----------
+  function deliveryScope() { return state.orders.filter(function (o) { return !o.cancelled && cstatus(o) === "confirmed"; }); }
+  function dBucket(o) {
+    var sg = stage(o), d = rec(o).delivery || {};
+    if (sg === "tobook") return "tobook";
+    if (sg === "booked") return "transit";
+    if (sg === "delivered" && !d.cashReceived) return "cashdue";
+    return "done";
+  }
+  function renderDeliveries() {
+    var scope = deliveryScope();
+    ["tobook", "transit", "cashdue", "done"].forEach(function (f) {
+      var list = scope.filter(function (o) { return dBucket(o) === f; });
+      $("n-" + f).textContent = list.length;
+      var sum = list.reduce(function (a, o) { return a + (stage(o) === "returned" ? 0 : o.total); }, 0);
+      $("a-" + f).textContent = f === "done" ? (rs(sum) + " received") : rs(sum);
+    });
+    var need = scope.filter(function (o) { var b = dBucket(o); return b === "tobook" || b === "cashdue"; }).length;
+    $("tc-deliveries").textContent = need ? need : "";
+    document.querySelectorAll("[data-dfilter]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-dfilter") === state.dfilter)); });
+
+    var box = $("deliveryList");
+    var shown = scope.filter(function (o) { return dBucket(o) === state.dfilter; });
+    if (!shown.length) {
+      box.innerHTML = '<div class="empty">' + esc({
+        tobook: scope.length ? "Everything confirmed has been booked." : "No confirmed orders yet. Confirm orders on the Confirm page and they'll show up here.",
+        transit: "Nothing on the way right now.",
+        cashdue: "No delivered orders waiting for cash from the courier.",
+        done: "Nothing paid or returned yet."
+      }[state.dfilter]) + "</div>";
+      return;
+    }
+    keepFocus(box, function () {
+      box.innerHTML = shown.map(function (o) {
+        var d = rec(o).delivery || {}, sg = stage(o);
+        var tone = sg === "returned" ? "bad" : sg === "delivered" ? (d.cashReceived ? "ok" : "warn") : STAGE[sg].tone;
+        var pill = sg === "delivered" ? (d.cashReceived ? "Cash received" : "Delivered · cash due") : STAGE[sg].label;
+        var extra =
+          '<div class="ship">' +
+            '<label for="cour-' + o.key + '">Courier<select id="cour-' + o.key + '" data-act="courier">' +
+              COURIERS.map(function (c) { return '<option value="' + esc(c) + '"' + (c === (d.courier || "") ? " selected" : "") + ">" + (c ? esc(c) : "Choose…") + "</option>"; }).join("") +
+            "</select></label>" +
+            '<label for="trk-' + o.key + '">Tracking number<input type="text" id="trk-' + o.key + '" data-act="tracking" value="' + esc(d.tracking || "") + '" placeholder="Paste from the courier"></label>' +
+          "</div>";
+        var actions =
+          '<button type="button" class="act a-info" data-act="booked" aria-pressed="' + (sg === "booked") + '">Booked</button>' +
+          '<button type="button" class="act a-ok" data-act="delivered" aria-pressed="' + (sg === "delivered") + '">Delivered</button>' +
+          '<button type="button" class="act a-bad" data-act="returned" aria-pressed="' + (sg === "returned") + '">Returned</button>' +
+          '<span class="spacer"></span>' +
+          (sg === "delivered" ? '<label class="cash"><input type="checkbox" id="cash-' + o.key + '" data-act="cash"' + (d.cashReceived ? " checked" : "") + ">Cash received</label>" : "") +
+          (sg !== "tobook" ? '<button type="button" class="btn-ghost btn-sm" data-act="unbook">Undo</button>' : "");
+        var meta = [];
+        if (d.bookedAt) meta.push("Booked " + ago(d.bookedAt));
+        if (d.deliveredAt) meta.push("Delivered " + ago(d.deliveredAt));
+        if (d.returnedAt) meta.push("Returned " + ago(d.returnedAt));
+        if (d.cashAt && d.cashReceived) meta.push("Cash received " + ago(d.cashAt));
+        return orderCard(o, { view: "d", tone: tone, pill: pill, extra: extra, actions: actions, meta: meta });
+      }).join("");
+    });
+  }
+
+  // ---------- SALES ----------
+  function renderSales() {
+    document.querySelectorAll("[data-range]").forEach(function (b) { b.setAttribute("aria-pressed", String(Number(b.getAttribute("data-range")) === state.range)); });
+    var now = Date.now(), from = state.range ? now - state.range * 86400000 : 0;
+    var inRange = state.orders.filter(function (o) { return (Date.parse(o.createdAt) || 0) >= from; });
+    $("salesTitle").textContent = state.range ? "Last " + state.range + " days" : "All time";
+
+    var live = inRange.filter(function (o) { return !isDead(o); });
+    var decided = inRange.filter(function (o) { var s = cstatus(o); return o.cancelled || s === "confirmed" || s === "cancelled"; });
+    var confirmed = inRange.filter(function (o) { return !o.cancelled && cstatus(o) === "confirmed"; });
+    var dead = inRange.filter(isDead);
+    var delivered = confirmed.filter(function (o) { return stage(o) === "delivered"; });
+    var returned = confirmed.filter(function (o) { return stage(o) === "returned"; });
+    var cashIn = delivered.filter(function (o) { return (rec(o).delivery || {}).cashReceived; });
+    var cashDue = delivered.filter(function (o) { return !(rec(o).delivery || {}).cashReceived; });
+    var sum = function (l) { return l.reduce(function (a, o) { return a + o.total; }, 0); };
+    var shipped = delivered.length + returned.length;
+
+    var kp = [
+      { l: "Orders placed", n: inRange.length, s: rs(sum(inRange)) + " total" },
+      { l: "Confirmed", n: pct(confirmed.length, decided.length), s: confirmed.length + " of " + decided.length + " answered" },
+      { l: "Cancelled / fake", n: pct(dead.length, inRange.length), s: dead.length + " orders · " + rs(sum(dead)) },
+      { l: "Average order", n: live.length ? rs(sum(live) / live.length) : "–", s: "excluding cancelled" },
+      { l: "Cash received", n: rs(sum(cashIn)), s: cashIn.length + " paid by courier" },
+      { l: "Cash with courier", n: rs(sum(cashDue)), s: cashDue.length + " delivered, not paid" + (shipped ? " · " + pct(returned.length, shipped) + " returned" : "") }
+    ];
+    $("kpis").innerHTML = kp.map(function (k) {
+      return '<div class="kpi"><span class="lbl">' + esc(k.l) + '</span><span class="num">' + esc(k.n) + '</span><span class="sub">' + esc(k.s) + "</span></div>";
+    }).join("");
+
+    var days = state.range ? Math.min(state.range, 30) : 30;
+    var firstT = state.orders.reduce(function (m, o) { var t = Date.parse(o.createdAt) || now; return Math.min(m, t); }, now);
+    if (!state.range) days = Math.max(7, Math.min(30, Math.ceil((now - firstT) / 86400000) + 1));
+    var buckets = [];
+    for (var i = days - 1; i >= 0; i--) { var t = now - i * 86400000; buckets.push({ key: pkDayKey(t), t: t, n: 0, v: 0 }); }
+    var byKey = {}; buckets.forEach(function (b) { byKey[b.key] = b; });
+    state.orders.forEach(function (o) { var b = byKey[pkDayKey(Date.parse(o.createdAt))]; if (b) { b.n++; b.v += o.total; } });
+    var max = Math.max(1, buckets.reduce(function (m, b) { return Math.max(m, b.n); }, 0));
+    var step = max <= 4 ? 1 : max <= 10 ? 2 : max <= 25 ? 5 : Math.ceil(max / 5 / 5) * 5;
+    var top = Math.ceil(max / step) * step;
+    var ticks = []; for (var v = 0; v <= top; v += step) ticks.push(v);
+    var labelEvery = days > 14 ? 5 : days > 7 ? 2 : 1;
+    var dayLabel = function (t) { return new Date(t).toLocaleDateString("en-PK", { timeZone: "Asia/Karachi", day: "numeric", month: "short" }); };
+    $("chartCap").textContent = (state.range ? "Last " + days + " days" : "Since your first order") + ". Orders placed, including ones later cancelled.";
+    $("dayChart").innerHTML =
+      '<div class="chart" id="chartBox">' +
+        '<div class="yaxis" aria-hidden="true">' + ticks.map(function (tk) { return '<span style="bottom:' + (tk / top * 100) + '%">' + tk + "</span>"; }).join("") + "</div>" +
+        '<div class="plot">' +
+          ticks.slice(1).map(function (tk) { return '<div class="grid-line" style="bottom:' + (tk / top * 100) + '%"></div>'; }).join("") +
+          '<div class="bars">' + buckets.map(function (b) {
+            var lbl = dayLabel(b.t);
+            return '<div class="bar-col" tabindex="0" data-tip="' + esc(lbl + ": " + b.n + (b.n === 1 ? " order" : " orders") + " · " + rs(b.v)) + '" aria-label="' + esc(lbl + ", " + b.n + " orders") + '">' +
+              '<div class="bar" style="height:' + (b.n / top * 100) + '%"></div></div>';
+          }).join("") + "</div>" +
+        "</div>" +
+        '<div class="xaxis" aria-hidden="true">' + buckets.map(function (b, i2) {
+          return "<span>" + ((days - 1 - i2) % labelEvery === 0 ? esc(dayLabel(b.t)) : "") + "</span>";
+        }).join("") + "</div>" +
+      "</div>";
+
+    var waiting = inRange.filter(function (o) { var s = cstatus(o); return !o.cancelled && (s === "new" || s === "noanswer"); });
+    var rows = [
+      { l: "Waiting for confirmation", tone: "new", n: waiting.length },
+      { l: "Confirmed, not booked yet", tone: "ok", n: confirmed.filter(function (o) { return stage(o) === "tobook"; }).length },
+      { l: "On the way", tone: "info", n: confirmed.filter(function (o) { return stage(o) === "booked"; }).length },
+      { l: "Delivered", tone: "ok", n: delivered.length },
+      { l: "Returned by customer", tone: "bad", n: returned.length },
+      { l: "Cancelled or fake", tone: "bad", n: dead.length }
+    ];
+    $("funnel").innerHTML = rows.map(function (r) {
+      return '<div class="row"><span><span class="dot ' + r.tone + '"></span>&nbsp; ' + esc(r.l) + '</span><span class="v">' + r.n + "</span></div>";
+    }).join("");
+
+    var units = {};
+    live.forEach(function (o) { o.items.forEach(function (it) { var k = it.productId || it.title; var u = units[k] || (units[k] = { title: it.title, n: 0, v: 0 }); u.n += it.qty; u.v += it.amount; }); });
+    var tops = Object.keys(units).map(function (k) { return units[k]; }).sort(function (a, b) { return b.n - a.n || b.v - a.v; }).slice(0, 8);
+    var umax = tops.length ? tops[0].n : 1;
+    $("topProducts").innerHTML = tops.length ? tops.map(function (u) {
+      return '<div class="hbar"><div class="top"><span>' + esc(shortTitle(u.title)) + '</span><span class="n">' + u.n + " sold · " + rs(u.v) + '</span></div><div class="track"><div class="fill" style="width:' + (u.n / umax * 100) + '%"></div></div></div>';
+    }).join("") : '<div class="empty">No sales in this period.</div>';
+  }
+
+  function showTip(col) {
+    var box = $("chartBox"); if (!box) return;
+    hideTip();
+    var tip = document.createElement("div"); tip.className = "tip"; tip.id = "chartTip"; tip.textContent = col.getAttribute("data-tip");
+    var br = box.getBoundingClientRect(), cr = col.getBoundingClientRect(), bar = col.querySelector(".bar").getBoundingClientRect();
+    var x = Math.max(70, Math.min(br.width - 70, cr.left - br.left + cr.width / 2));
+    tip.style.left = x + "px"; tip.style.top = (Math.min(bar.top, cr.bottom - 4) - br.top - 6) + "px";
+    box.appendChild(tip);
+  }
+  function hideTip() { var t = $("chartTip"); if (t) t.remove(); }
+  document.addEventListener("pointerover", function (e) { var c = e.target.closest && e.target.closest(".bar-col"); if (c) showTip(c); });
+  document.addEventListener("pointerout", function (e) { if (e.target.closest && e.target.closest(".bar-col")) hideTip(); });
+  document.addEventListener("focusin", function (e) { if (e.target.classList && e.target.classList.contains("bar-col")) showTip(e.target); });
+  document.addEventListener("focusout", function (e) { if (e.target.classList && e.target.classList.contains("bar-col")) hideTip(); });
+
+  // ---------- STOCK ----------
+  function packs() { return state.settings.packs || {}; }
+  function singles() { var pk = packs(); return state.products.filter(function (p) { return p.active && !pk[p.id]; }); }
+  function stockLevels() {
+    var now = Date.now(), levels = {}, pk = packs(), stock = state.settings.stock || {};
+    singles().forEach(function (p) {
+      var c = stock[p.id];
+      levels[p.id] = { p: p, counted: c ? Number(c.onHand) : null, countedAt: c ? Date.parse(c.countedAt) : null, sold: 0, back: 0, sold14: 0 };
+    });
+    state.orders.forEach(function (o) {
+      if (isDead(o)) return;
+      var t = Date.parse(o.createdAt) || 0, returned = stage(o) === "returned";
+      o.items.forEach(function (it) {
+        var parts = pk[it.productId] ? pk[it.productId].contains : [it.productId];
+        parts.forEach(function (pid) {
+          var L = levels[pid]; if (!L) return;
+          if (now - t <= 14 * 86400000) L.sold14 += it.qty;
+          if (L.countedAt != null && t >= L.countedAt) { L.sold += it.qty; if (returned) L.back += it.qty; }
+        });
+      });
+    });
+    Object.keys(levels).forEach(function (k) {
+      var L = levels[k], lowAt = state.settings.lowAt;
+      L.left = L.counted == null ? null : L.counted - L.sold + L.back;
+      var perDay = L.sold14 / 14;
+      L.daysLeft = (L.left == null || perDay <= 0) ? null : Math.max(0, Math.floor(L.left / perDay));
+      L.tone = L.left == null ? "mute" : L.left <= 0 ? "bad" : L.left <= lowAt ? "warn" : "ok";
+      L.label = L.left == null ? "Not counted" : L.left <= 0 ? "Out of stock" : L.left <= lowAt ? "Running low" : "In stock";
+    });
+    return levels;
+  }
+  function renderStock() {
+    var levels = stockLevels(), arr = Object.keys(levels).map(function (k) { return levels[k]; });
+    var order = { bad: 0, warn: 1, mute: 2, ok: 3 };
+    arr.sort(function (a, b) { return order[a.tone] - order[b.tone] || a.p.title.localeCompare(b.p.title); });
+    var cnt = function (t) { return arr.filter(function (L) { return L.tone === t; }).length; };
+    $("tc-stock").textContent = (cnt("bad") + cnt("warn")) || "";
+    $("stockPiles").innerHTML = [["bad", "Out of stock", cnt("bad")], ["warn", "Running low", cnt("warn")], ["ok", "In stock", cnt("ok")], ["new", "Not counted yet", cnt("mute")]].map(function (x) {
+      return '<div class="pile"><span class="lbl"><span class="dot ' + x[0] + '"></span>' + x[1] + '</span><span class="num">' + x[2] + '</span><span class="amt">products</span></div>';
+    }).join("");
+    if (document.activeElement !== $("lowAt")) $("lowAt").value = state.settings.lowAt;
+
+    var stock = state.settings.stock || {}, body = $("stockBody");
+    if (!arr.length) body.innerHTML = '<tr><td colspan="7">No products loaded yet.</td></tr>';
+    else keepFocus(body, function () {
+      body.innerHTML = arr.map(function (L) {
+        var c = stock[L.p.id];
+        return '<tr><td class="full name">' + esc(shortTitle(L.p.title)) + (c ? '<span class="sub">Counted ' + esc(pkTime(c.countedAt)) + "</span>" : "") + "</td>" +
+          '<td class="num" data-label="Counted">' + (L.counted == null ? "–" : L.counted) + "</td>" +
+          '<td class="num" data-label="Sold since">' + (L.counted == null ? "–" : (L.sold - L.back)) + "</td>" +
+          '<td class="num" data-label="Left now"><strong>' + (L.left == null ? "–" : L.left) + "</strong></td>" +
+          '<td class="num" data-label="Days left">' + (L.daysLeft == null ? "–" : (L.daysLeft > 99 ? "99+" : L.daysLeft)) + "</td>" +
+          '<td data-label="Status"><span class="pill ' + L.tone + '">' + L.label + "</span></td>" +
+          '<td class="full" data-label="Update count"><span class="count-edit"><input type="number" inputmode="numeric" min="0" step="1" id="cnt-' + L.p.id + '" data-pid="' + L.p.id + '" placeholder="On shelf" aria-label="Units on the shelf for ' + esc(shortTitle(L.p.title)) + '"><button type="button" class="btn-sm" data-count="' + L.p.id + '">Save</button></span></td></tr>';
+      }).join("");
+    });
+
+    var pk = packs(), now = Date.now();
+    var packRows = state.products.filter(function (p) { return pk[p.id]; });
+    $("packBody").innerHTML = packRows.length ? packRows.map(function (p) {
+      var parts = pk[p.id].contains || [];
+      var can = parts.reduce(function (m, pid) { var L = levels[pid]; return (L && L.left != null) ? Math.min(m, Math.max(0, L.left)) : m; }, Infinity);
+      var unknown = !parts.length || parts.some(function (pid) { return !levels[pid] || levels[pid].left == null; });
+      var sold30 = 0;
+      state.orders.forEach(function (o) {
+        if (isDead(o) || now - (Date.parse(o.createdAt) || 0) > 30 * 86400000) return;
+        o.items.forEach(function (it) { if (it.productId === p.id) sold30 += it.qty; });
+      });
+      var names = parts.map(function (pid) { var L = levels[pid]; return L ? shortTitle(L.p.title) : "?"; }).join(", ");
+      return '<tr><td class="full name">' + esc(shortTitle(p.title)) + '</td><td class="full" data-label="Contains"><span class="sub" style="font-size:13px">' + esc(names || "Nothing ticked yet") + '</span></td><td class="num" data-label="Can make"><strong>' + (unknown ? "–" : can) + "</strong>" + (unknown ? '<span class="sub">count every product first</span>' : "") + '</td><td class="num" data-label="Sold (30 days)">' + sold30 + "</td></tr>";
+    }).join("") : '<tr><td colspan="4">No packs set up. Set them up under Settings.</td></tr>';
+  }
+
+  // ---------- CUSTOMERS ----------
+  function renderCustomers() {
+    var idx = customerIndex();
+    var all = Object.keys(idx).map(function (k) { return idx[k]; }).sort(function (a, b) { return b.last - a.last; });
+    var repeat = all.filter(function (c) { return c.good >= 2; }), risky = all.filter(function (c) { return c.bad > 0; });
+    document.querySelectorAll("[data-cust]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-cust") === state.custFilter)); });
+    $("custPiles").innerHTML = [
+      ["new", "Customers", all.length, "phone numbers"],
+      ["ok", "Repeat buyers", repeat.length, pct(repeat.length, all.length) + " of customers"],
+      ["bad", "Risky numbers", risky.length, "cancelled or returned"],
+      ["info", "Average spend", all.length ? rs(all.reduce(function (a, c) { return a + c.value; }, 0) / all.length) : "–", "per customer"]
+    ].map(function (x) { return '<div class="pile"><span class="lbl"><span class="dot ' + x[0] + '"></span>' + x[1] + '</span><span class="num">' + x[2] + '</span><span class="amt">' + x[3] + "</span></div>"; }).join("");
+
+    var list = state.custFilter === "repeat" ? repeat : state.custFilter === "risky" ? risky : all;
+    var q = state.custQuery.trim().toLowerCase(), qd = q.replace(/\D/g, "");
+    if (q) list = list.filter(function (c) {
+      return (c.name || "").toLowerCase().indexOf(q) >= 0 || (c.city || "").toLowerCase().indexOf(q) >= 0 ||
+        (qd && (c.key.indexOf(qd) >= 0 || String(c.phone).replace(/\D/g, "").indexOf(qd) >= 0));
+    });
+    var box = $("custList"), open = {};
+    box.querySelectorAll("details[open]").forEach(function (d) { open[d.getAttribute("data-ck")] = true; });
+    if (!list.length) { box.innerHTML = '<div class="empty">' + (q ? "No customers match that search." : "No customers here yet.") + "</div>"; return; }
+    box.innerHTML = list.map(function (c) {
+      var badges = [];
+      if (c.bad > 0) badges.push('<span class="pill bad">Risky · ' + c.bad + " cancelled/returned</span>");
+      if (c.good >= 2) badges.push('<span class="pill ok">Repeat buyer</span>');
+      if (c.delivered) badges.push('<span class="pill mute">' + c.delivered + " delivered</span>");
+      var wa = waNumber(c.phone);
+      return '<details class="cust" data-ck="' + esc(c.key) + '"' + (open[c.key] ? " open" : "") + ">" +
+        '<summary><div><div class="c-name">' + esc(c.name) + '</div><div class="c-sub">' + esc(prettyPhone(c.phone) || "No phone") + (c.city ? " · " + esc(c.city) : "") + "</div></div>" +
+        '<div class="c-right"><span class="c-total">' + rs(c.value) + '</span><span class="o-meta">' + c.orders.length + (c.orders.length === 1 ? " order" : " orders") + " · last " + esc(ago(c.last)) + "</span></div>" +
+        (badges.length ? '<div class="c-badges">' + badges.join("") + "</div>" : "") + "</summary>" +
+        '<div class="c-orders">' + c.orders.map(function (o) {
+          var st = cstatus(o), sg = stage(o), label, tone;
+          if (o.cancelled) { label = "Cancelled in Shopify"; tone = "bad"; }
+          else if (st === "confirmed") { label = sg === "delivered" ? "Delivered" : sg === "returned" ? "Returned" : sg === "booked" ? "On the way" : "Confirmed"; tone = sg === "returned" ? "bad" : sg === "booked" ? "info" : "ok"; }
+          else { label = CSTATUS[st].label; tone = CSTATUS[st].tone; }
+          return '<div class="c-order"><span class="o-num">' + esc(o.name) + '</span><span class="c-items">' + esc(o.items.map(function (i) { return i.qty + "× " + shortTitle(i.title); }).join(", ")) + '</span><span class="pill ' + tone + '">' + esc(label) + '</span><span style="font-variant-numeric:tabular-nums">' + rs(o.total) + "</span></div>";
+        }).join("") +
+        (wa ? '<div class="row" style="margin-top:6px"><button type="button" class="btn btn-sm btn-wa" data-open-wa="' + wa + '">Open WhatsApp chat</button><button type="button" class="btn btn-sm" data-open-tel="' + wa + '">Call</button></div>' : "") +
+        "</div></details>";
+    }).join("");
+  }
+
+  // ---------- SETTINGS ----------
+  function renderSettings() {
+    var tok = lsGet("gd-token") || {};
+    $("storeInfo").innerHTML =
+      "<dt>Store</dt><dd>" + esc(state.shopName || "–") + "</dd>" +
+      "<dt>Address</dt><dd><code>" + esc(cfg ? cfg.shop : "") + "</code></dd>" +
+      "<dt>Permissions</dt><dd>" + esc(tok.scope || "–") + "</dd>" +
+      "<dt>Last synced</dt><dd>" + esc(state.fetchedAt ? pkTime(state.fetchedAt) : "–") + "</dd>";
+    $("appVer").textContent = "Glovia Desk " + APP_VERSION + ".";
+    var box = $("packEdit");
+    if (box.contains(document.activeElement)) return;
+    var pk = packs(), sing = state.products.filter(function (p) { return p.active; });
+    var packCandidates = state.products.filter(function (p) { return p.active && (pk[p.id] || /pack|trio|bundle|set|kit|combo/i.test(p.title + " " + p.type)); });
+    box.innerHTML = packCandidates.length ? packCandidates.map(function (p) {
+      var cur = (pk[p.id] && pk[p.id].contains) || [];
+      return '<div class="pk" data-pack="' + p.id + '"><div class="pk-name">' + esc(p.title) + '</div><div class="chips">' +
+        sing.filter(function (s) { return s.id !== p.id && !pk[s.id]; }).map(function (s) {
+          return '<label class="chip"><input type="checkbox" value="' + s.id + '"' + (cur.indexOf(s.id) >= 0 ? " checked" : "") + ">" + esc(shortTitle(s.title)) + "</label>";
+        }).join("") + "</div></div>";
+    }).join("") : '<p class="tokens">No products with "pack", "trio", "bundle" or "set" in the name were found.</p>';
+  }
+
+  // ---------- render all ----------
+  function renderAll() {
+    renderConfirm();
+    if (state.loading && !state.orders.length) return;
+    renderDeliveries();
+    renderStock();
+    if (state.tab === "sales") renderSales();
+    if (state.tab === "customers") renderCustomers();
+    if (state.tab === "settings") renderSettings();
+  }
+  function setSync() {
+    var txt;
+    if (state.loading && !state.orders.length) txt = "Loading orders…";
+    else if (state.fromCache) txt = "Saved on this phone · " + (state.fetchedAt ? pkTime(state.fetchedAt) : "");
+    else txt = "Synced " + (state.fetchedAt ? ago(state.fetchedAt) : "now");
+    $("syncText").textContent = txt;
+  }
+
+  // ---------- opening WhatsApp and the dialer ----------
+  function openExternal(url) {
+    // Inside the Android app, Capacitor hands links outside the app to Android,
+    // which opens WhatsApp or the phone dialer. In a normal browser, use a new tab.
+    if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) window.location.href = url;
+    else window.open(url, "_blank", "noopener");
+  }
+
+  // ---------- events ----------
+  document.addEventListener("click", function (e) {
+    var t;
+    if ((t = e.target.closest("[data-cfilter]"))) { state.cfilter = t.getAttribute("data-cfilter"); renderConfirm(); return; }
+    if ((t = e.target.closest("[data-dfilter]"))) { state.dfilter = t.getAttribute("data-dfilter"); renderDeliveries(); return; }
+    if ((t = e.target.closest("[data-range]"))) { state.range = Number(t.getAttribute("data-range")); renderSales(); return; }
+    if ((t = e.target.closest("[data-cust]"))) { state.custFilter = t.getAttribute("data-cust"); renderCustomers(); return; }
+    if ((t = e.target.closest("[data-count]"))) { saveCount(t.getAttribute("data-count")); return; }
+    if ((t = e.target.closest("[data-open-wa]"))) { openExternal("https://wa.me/" + t.getAttribute("data-open-wa")); return; }
+    if ((t = e.target.closest("[data-open-tel]"))) { openExternal("tel:+" + t.getAttribute("data-open-tel")); return; }
+
+    t = e.target.closest("[data-act]"); if (!t) return;
+    var card = t.closest(".order"); if (!card) return;
+    var o = findOrder(card.getAttribute("data-key")); if (!o) return;
+    var act = t.getAttribute("data-act"), s = rec(o), now = new Date().toISOString();
+    if (t.tagName === "INPUT" || t.tagName === "SELECT") return;
+    var done = function (msg) { return function () { toast(msg); }; }, ignore = function () {};
+    switch (act) {
+      case "copy": copyPhone(card, o); break;
+      case "call": openExternal("tel:+" + waNumber(o.phone)); break;
+      case "wa":
+        openExternal("https://wa.me/" + waNumber(o.phone) + "?text=" + encodeURIComponent(fillTemplate(o)));
+        setTimeout(function () { patchOrder(o, { waOpenedAt: new Date().toISOString() }).catch(ignore); }, 400);
+        break;
+      case "confirmed": patchOrder(o, { status: "confirmed" }).then(done(o.name + " confirmed. It's now on the Deliveries page."), ignore); break;
+      case "noanswer": patchOrder(o, { status: "noanswer", attempts: (s.attempts || 0) + 1 }).then(done(o.name + ": no answer noted"), ignore); break;
+      case "cancelled": patchOrder(o, { status: "cancelled" }).then(done(o.name + " marked cancelled"), ignore); break;
+      case "reset": patchOrder(o, { status: "new" }).then(done(o.name + " moved back to To confirm"), ignore); break;
+      case "booked": patchOrder(o, { delivery: { stage: "booked", bookedAt: (s.delivery && s.delivery.bookedAt) || now } }).then(done(o.name + " marked booked"), ignore); break;
+      case "delivered": patchOrder(o, { delivery: { stage: "delivered", deliveredAt: now } }).then(done(o.name + " delivered. Tick Cash received when the courier pays."), ignore); break;
+      case "returned": patchOrder(o, { delivery: { stage: "returned", returnedAt: now, cashReceived: false } }).then(done(o.name + " marked returned. Its items are back in stock."), ignore); break;
+      case "unbook": patchOrder(o, { delivery: { stage: "tobook", cashReceived: false } }).then(done(o.name + " moved back to To book"), ignore); break;
+    }
+  });
+
+  document.addEventListener("change", function (e) {
+    var t = e.target, act = t.getAttribute && t.getAttribute("data-act");
+    if (!act) return;
+    var card = t.closest(".order"); var o = card && findOrder(card.getAttribute("data-key")); if (!o) return;
+    var s = rec(o), ignore = function () {};
+    if (act === "note") {
+      var v = t.value.trim(); if (v === (s.note || "")) return;
+      patchOrder(o, { note: v }).then(function () { toast("Note saved"); }, ignore);
+    } else if (act === "courier") {
+      patchOrder(o, { delivery: { courier: t.value } }).then(function () { toast("Courier saved"); }, ignore);
+    } else if (act === "tracking") {
+      var tv = t.value.trim(); if (tv === ((s.delivery && s.delivery.tracking) || "")) return;
+      var patch = { tracking: tv };
+      if (tv && stage(o) === "tobook") { patch.stage = "booked"; patch.bookedAt = new Date().toISOString(); }
+      patchOrder(o, { delivery: patch }).then(function () { toast(patch.stage ? "Tracking saved. Order moved to On the way." : "Tracking saved"); }, ignore);
+    } else if (act === "cash") {
+      patchOrder(o, { delivery: { cashReceived: t.checked, cashAt: t.checked ? new Date().toISOString() : null } })
+        .then(function () { toast(t.checked ? "Cash received for " + o.name : "Cash marked as not received"); }, ignore);
+    }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && e.target.getAttribute && e.target.getAttribute("data-pid")) { e.preventDefault(); saveCount(e.target.getAttribute("data-pid")); }
+  });
+  $("custSearch").addEventListener("input", function (e) { state.custQuery = e.target.value; renderCustomers(); });
+
+  function saveCount(pid) {
+    var inp = $("cnt-" + pid); if (!inp) return;
+    var v = inp.value.trim();
+    if (v === "" || !/^\d+$/.test(v)) { toast("Enter how many are on the shelf, as a whole number."); inp.focus(); return; }
+    var entry = { onHand: Number(v), countedAt: new Date().toISOString() };
+    inp.value = "";
+    var prev = state.settings.stock[pid];
+    state.settings.stock[pid] = entry; renderAll();
+    saveSettings(function (cur) { cur.stock = cur.stock || {}; cur.stock[pid] = entry; })
+      .then(function () { toast("Count saved: " + v + " on the shelf"); }, function (err) {
+        if (prev) state.settings.stock[pid] = prev; else delete state.settings.stock[pid];
+        renderAll(); toast("Couldn't save the count: " + ((err && err.message) || "error"));
+      });
+  }
+  $("lowSave").addEventListener("click", function () {
+    var v = $("lowAt").value.trim();
+    if (!/^\d+$/.test(v)) { toast("Enter a whole number."); return; }
+    saveSettings(function (cur) { cur.lowAt = Number(v); }).then(function () { toast("Low-stock warning saved"); }, function (err) { toast("Couldn't save: " + ((err && err.message) || "error")); });
+  });
+  $("tplSave").addEventListener("click", function () {
+    var v = $("tplText").value.trim();
+    if (!v) { $("tplStatus").textContent = "The message can't be empty."; return; }
+    $("tplStatus").textContent = "Saving…";
+    saveSettings(function (cur) { cur.template = v; })
+      .then(function () { $("tplStatus").textContent = "Saved. New WhatsApp messages use it."; }, function () { $("tplStatus").textContent = "Couldn't save the message. Try again."; });
+  });
+  $("tplReset").addEventListener("click", function () { $("tplText").value = DEFAULT_TPL; $("tplStatus").textContent = "Default restored. Press Save message to keep it."; });
+  $("packSave").addEventListener("click", function () {
+    var next = {};
+    document.querySelectorAll("#packEdit [data-pack]").forEach(function (el) {
+      var ids = Array.prototype.map.call(el.querySelectorAll("input:checked"), function (i) { return i.value; });
+      if (ids.length) next[el.getAttribute("data-pack")] = { contains: ids };
+    });
+    $("packStatus").textContent = "Saving…";
+    saveSettings(function (cur) { cur.packs = next; }).then(function () { $("packStatus").textContent = "Packs saved."; }, function () { $("packStatus").textContent = "Couldn't save. Try again."; });
+  });
+  $("refreshBtn").addEventListener("click", function () { loadAll(true); });
+  $("testBtn").addEventListener("click", function () {
+    lsDel("gd-token");
+    gql("query { shop { name } }").then(function (d) { toast("Connected to " + d.shop.name); renderSettings(); }, function (err) { showNotice(explain(err), "bad"); });
+  });
+  $("logoutBtn").addEventListener("click", function () {
+    var b = $("logoutBtn");
+    if (b.getAttribute("data-armed") !== "1") { b.setAttribute("data-armed", "1"); b.textContent = "Tap again to disconnect"; setTimeout(function () { b.removeAttribute("data-armed"); b.textContent = "Disconnect this phone"; }, 4000); return; }
+    lsDel("gd-config"); lsDel("gd-token"); lsDel("gd-cache");
+    location.hash = ""; location.reload();
+  });
+
+  function copyPhone(card, o) {
+    var num = prettyPhone(o.phone).replace(/\s/g, "");
+    var sel = function () {
+      var n = card.querySelector(".o-phone .num"); if (!n) return;
+      var r = document.createRange(); r.selectNodeContents(n);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      toast("Number selected. Copy it from your keyboard.");
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(num).then(function () { toast("Copied " + num); }, sel);
+    else sel();
+  }
+  function findOrder(key) { for (var i = 0; i < state.orders.length; i++) if (state.orders[i].key === key) return state.orders[i]; return null; }
+
+  // ---------- setup ----------
+  $("setupForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var shop = normalizeShop($("fShop").value), id = $("fId").value.trim(), secret = $("fSecret").value.trim();
+    var err = $("setupErr");
+    if (!/^[a-z0-9][a-z0-9-]*\.myshopify\.com$/.test(shop)) { err.textContent = "Enter the store's .myshopify.com address, like yourstore.myshopify.com."; err.hidden = false; return; }
+    if (!id || !secret) { err.textContent = "Paste both the Client ID and the Client secret."; err.hidden = false; return; }
+    err.hidden = true;
+    $("setupBtn").disabled = true; $("setupBtn").textContent = "Connecting…";
+    cfg = { shop: shop, clientId: id, clientSecret: secret };
+    lsDel("gd-token");
+    gql("query { shop { name } }").then(function () {
+      lsSet("gd-config", cfg);
+      start();
+    }, function (ex) {
+      cfg = null;
+      var tmp = document.createElement("div"); tmp.innerHTML = explain(ex);
+      err.textContent = tmp.textContent; err.hidden = false;
+    }).then(function () { $("setupBtn").disabled = false; $("setupBtn").textContent = "Connect store"; });
+  });
+
+  function start() {
+    $("setup").hidden = true; $("app").hidden = false;
+    loadCache();
+    setTab((location.hash || "#confirm").slice(1));
+    setSync(); renderAll();
+    loadAll(false);
+  }
+
+  setInterval(function () { if (cfg && document.visibilityState === "visible" && !$("app").hidden) loadAll(false); }, 120000);
+  document.addEventListener("visibilitychange", function () {
+    if (cfg && document.visibilityState === "visible" && !$("app").hidden && state.fetchedAt && Date.now() - state.fetchedAt > 60000) loadAll(false);
+  });
+  setInterval(setSync, 60000);
+
+  if (cfg && cfg.shop && cfg.clientId && cfg.clientSecret) start();
+  else { $("setup").hidden = false; $("tplText").value = DEFAULT_TPL; }
+})();
+</script>
+
+</body>
+</html>
