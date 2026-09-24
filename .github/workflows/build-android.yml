@@ -14,12 +14,21 @@ jobs:
 
       - name: Put uploaded files in place
         run: |
+          # Works whether the files were uploaded loose or inside a folder.
+          P=$(find . -name package.json -not -path "*/node_modules/*" -not -path "./.git/*" | head -1)
+          if [ -z "$P" ]; then
+            echo "::error::package.json is missing. Upload package.json, capacitor.config.json, index.html and the .png files to the repository."
+            exit 1
+          fi
+          D=$(dirname "$P")
+          if [ "$D" != "." ]; then echo "Files are inside $D - moving them up"; cp -r "$D"/. . ; fi
           mkdir -p www assets
           if [ -f index.html ]; then cp index.html www/index.html; fi
+          if [ ! -f www/index.html ]; then echo "::error::index.html is missing. Upload index.html to the repository."; exit 1; fi
           for f in icon-only.png icon-foreground.png icon-background.png splash.png splash-dark.png; do
             if [ -f "$f" ]; then cp "$f" assets/; fi
           done
-          ls -R www assets
+          ls -la . www assets
 
       - name: Set up Node
         uses: actions/setup-node@v4
