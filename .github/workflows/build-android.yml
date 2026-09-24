@@ -22,6 +22,17 @@ jobs:
           fi
           D=$(dirname "$P")
           if [ "$D" != "." ]; then echo "Files are inside $D - moving them up"; cp -r "$D"/. . ; fi
+          # Write the app settings here so a missing or renamed upload can't break the build.
+          cat > capacitor.config.json <<'JSON'
+          {
+            "appId": "com.gloviaskin.desk",
+            "appName": "Glovia Desk",
+            "webDir": "www",
+            "android": { "adjustMarginsForEdgeToEdge": "auto" },
+            "plugins": { "CapacitorHttp": { "enabled": true } }
+          }
+          JSON
+          cat capacitor.config.json
           mkdir -p www assets
           if [ -f index.html ]; then cp index.html www/index.html; fi
           if [ ! -f www/index.html ]; then echo "::error::index.html is missing. Upload index.html to the repository."; exit 1; fi
